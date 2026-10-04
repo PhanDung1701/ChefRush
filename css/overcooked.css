@@ -1,0 +1,600 @@
+/* ==========================================================================
+   OVERCOOKED 3D GAMEPLAY UI & TOUCH CONTROLS STYLES
+   ========================================================================== */
+
+/* 1. Fullscreen 3D Viewport Canvas */
+#kitchen-3d-viewport {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+
+#kitchen-3d-viewport canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* 2. Top-Left Waiting Orders Column (Overcooked / KitchenChaos Style - Image 2) */
+.overcooked-orders-bar {
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 220px;
+    max-height: calc(100vh - 200px);
+    z-index: 20;
+    pointer-events: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+.overcooked-orders-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.recipes-waiting-title {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.6);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: auto;
+}
+
+/* Individual Waiting Recipe Card (Vertical Stack on Left) */
+.overcooked-order-card {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 4px solid #38bdf8;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 10px;
+    gap: 6px;
+    animation: orderCardPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    pointer-events: auto;
+}
+
+.overcooked-order-card:hover {
+    transform: translateX(4px);
+    background: rgba(20, 30, 55, 0.85);
+}
+
+.overcooked-order-card.urgent {
+    border-left-color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+    animation: orderShake 0.4s infinite alternate;
+}
+
+@keyframes orderCardPopIn {
+    0% { transform: translateX(-30px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes orderShake {
+    0% { transform: rotate(-0.8deg); }
+    100% { transform: rotate(0.8deg); }
+}
+
+/* Card Header: Dish Name & Reward */
+.order-dish-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    background: transparent;
+    padding: 0;
+    border-bottom: none;
+}
+
+.order-dish-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.order-dish-reward {
+    font-size: 12px;
+    font-weight: 800;
+    color: #fbbf24;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    flex-shrink: 0;
+}
+
+/* Recipe Ingredients (Row of food icons directly below dish name) */
+.order-recipe-formula {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    padding: 2px 0;
+    flex-wrap: wrap;
+}
+
+.recipe-ingredient-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.recipe-ingredient-chip.present {
+    background: rgba(34, 197, 94, 0.35);
+    border-color: #22c55e;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    transform: scale(1.1);
+}
+
+.recipe-ingredient-chip .chip-text {
+    display: none; /* Icon-only compact row as in Image 2 */
+}
+
+/* Slim Bottom Patience Timer */
+.order-patience-wrapper {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.order-patience-fill {
+    height: 100%;
+    width: 100%;
+    background: #22c55e;
+    transition: width 0.3s linear, background-color 0.3s ease;
+}
+
+.order-patience-fill.warning {
+    background: #f59e0b;
+}
+
+.order-patience-fill.danger {
+    background: #ef4444;
+}
+
+/* 3. Multi-directional Virtual Joystick (Bottom Left) */
+.virtual-joystick-container {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 140px;
+    height: 140px;
+    z-index: 20;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.joystick-base {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(30, 40, 60, 0.65) 100%);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+}
+
+.joystick-base:active {
+    cursor: grabbing;
+}
+
+.joystick-thumb {
+    position: absolute;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 15px rgba(245, 124, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #ffffff;
+    pointer-events: none;
+    transition: transform 0.05s ease-out;
+}
+
+.joystick-guide-label {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* 4. Action Buttons (Bottom Right) */
+.virtual-actions-container {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    z-index: 20;
+    pointer-events: auto;
+    touch-action: none;
+}
+
+.action-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.action-round-btn {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    border: 3.5px solid #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.1s ease;
+}
+
+.action-round-btn:active {
+    transform: scale(0.9) translateY(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Button 1: CẦM / ĐẶT */
+.btn-interact {
+    background: linear-gradient(135deg, #ff9100, #ff3d00);
+}
+
+/* Button 2: THÁI */
+.btn-chop {
+    background: linear-gradient(135deg, #00e676, #00b0ff);
+}
+
+.btn-chop:active {
+    filter: brightness(1.2);
+}
+
+/* Button 3: LƯỚT (Dash) */
+.btn-dash {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(135deg, #d500f9, #651fff);
+}
+
+.action-btn-icon {
+    font-size: 26px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.btn-dash .action-btn-icon {
+    font-size: 20px;
+}
+
+.action-btn-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.action-key-hint {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 6px;
+    border-radius: 6px;
+    text-shadow: none;
+}
+
+/* 5. Contextual Station Prompt Tooltip (Floats Center Bottom) */
+.station-prompt-pill {
+    position: absolute;
+    bottom: 125px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 22, 34, 0.88);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 30px;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    pointer-events: none;
+    animation: promptBounce 0.25s ease-out;
+}
+
+@keyframes promptBounce {
+    0% { transform: translateX(-50%) translateY(10px) scale(0.9); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+.station-prompt-text {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffd54f;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.station-prompt-badge {
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.15);
+    color: #e0e0e0;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Responsive Scaling for Smaller Mobile Viewports */
+@media (max-width: 768px) {
+    .virtual-joystick-container {
+        bottom: 20px;
+        left: 20px;
+        width: 120px;
+        height: 120px;
+    }
+    .joystick-thumb {
+        width: 50px;
+        height: 50px;
+    }
+    .virtual-actions-container {
+        bottom: 20px;
+        right: 20px;
+        gap: 12px;
+    }
+    .action-round-btn {
+        width: 65px;
+        height: 65px;
+    }
+    .btn-dash {
+        width: 50px;
+        height: 50px;
+    }
+    .action-btn-icon {
+        font-size: 22px;
+    }
+    .overcooked-orders-bar {
+        top: 10px;
+        left: 10px;
+        width: 170px;
+        gap: 6px;
+    }
+}
+
+/* 6. Pre-Level Controls & Gameplay Guide Modal (Requirement 8) */
+.controls-guide-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    background: rgba(10, 15, 26, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.controls-guide-card {
+    width: 620px;
+    max-width: 95vw;
+    background: rgba(24, 32, 50, 0.98);
+    border: 2px solid rgba(56, 189, 248, 0.35);
+    border-radius: 20px;
+    padding: 24px 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #ffffff;
+    animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.controls-guide-header {
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.controls-guide-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #38bdf8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.controls-guide-subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.pc-keys-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.pc-key-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.key-cap {
+    background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+    border: 2px solid #64748b;
+    border-bottom: 4px solid #475569;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 13px;
+    font-weight: 900;
+    color: #38bdf8;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    min-width: 52px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.key-desc {
+    display: flex;
+    flex-direction: column;
+}
+
+.key-desc-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.key-desc-detail {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.workflow-guide-box {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.workflow-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.workflow-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.4;
+}
+
+.workflow-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.step-num-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.controls-start-btn {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    border: none;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.45);
+    transition: all 0.2s ease;
+    align-self: center;
+    width: 100%;
+}
+
+.controls-start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(2, 132, 199, 0.6);
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+}
