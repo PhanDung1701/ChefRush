@@ -72,7 +72,7 @@ export class Kitchen3DScene {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         if (THREE.ACESFilmicToneMapping) {
             this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            this.renderer.toneMappingExposure = 1.0;
+            this.renderer.toneMappingExposure = 1.2; // Increased for a brighter, more vibrant and realistic look
         }
 
         // Clear existing canvas
@@ -98,32 +98,40 @@ export class Kitchen3DScene {
     }
 
     /**
-     * Lighting: Ambient + Warm Directional Sun + Soft Fill
+     * Lighting: Hemisphere (Sky/Ground) + Warm Directional Sun + Soft Fill
      */
     setupLights() {
         const THREE = window.THREE;
 
-        // Warm ambient light (gentle, not washed out)
-        const ambientLight = new THREE.AmbientLight(0xfff6ed, 0.65);
+        // 1. Realistic Hemisphere Light (Sky + Ground bounce)
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.45);
+        hemiLight.color.setHSL(0.6, 1, 0.6);
+        hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+        hemiLight.position.set(0, 50, 0);
+        this.scene.add(hemiLight);
+
+        // 2. Warm ambient light (gentle, not washed out)
+        const ambientLight = new THREE.AmbientLight(0xfff6ed, 0.5);
         this.scene.add(ambientLight);
 
-        // Directional Sunlight with soft shadows
-        const sunLight = new THREE.DirectionalLight(0xfff8f0, 0.75);
-        sunLight.position.set(10, 22, 14);
+        // 3. Directional Sunlight with soft, high-res shadows
+        const sunLight = new THREE.DirectionalLight(0xfff5e6, 1.25);
+        sunLight.position.set(10, 24, 12);
         sunLight.castShadow = true;
-        sunLight.shadow.mapSize.width = 1024;
-        sunLight.shadow.mapSize.height = 1024;
-        sunLight.shadow.camera.near = 5;
-        sunLight.shadow.camera.far = 45;
-        sunLight.shadow.camera.left = -12;
-        sunLight.shadow.camera.right = 12;
-        sunLight.shadow.camera.top = 10;
-        sunLight.shadow.camera.bottom = -10;
-        sunLight.shadow.bias = -0.001;
+        sunLight.shadow.mapSize.width = 2048; // High-res shadows
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.near = 0.5;
+        sunLight.shadow.camera.far = 50;
+        sunLight.shadow.camera.left = -16;
+        sunLight.shadow.camera.right = 16;
+        sunLight.shadow.camera.top = 16;
+        sunLight.shadow.camera.bottom = -16;
+        sunLight.shadow.bias = -0.0005;
+        sunLight.shadow.normalBias = 0.02; // Reduces shadow acne
         this.scene.add(sunLight);
 
-        // Soft back-fill light for rich Overcooked tones
-        const fillLight = new THREE.DirectionalLight(0x78909c, 0.3);
+        // 4. Soft back-fill light for rim lighting and rich tones
+        const fillLight = new THREE.DirectionalLight(0x90b0d0, 0.55);
         fillLight.position.set(-12, 16, -12);
         this.scene.add(fillLight);
     }
@@ -163,8 +171,8 @@ export class Kitchen3DScene {
 
         const floorMat = new THREE.MeshStandardMaterial({
             map: floorTexture,
-            roughness: 0.75, // Matte, soft non-glare surface
-            metalness: 0.02
+            roughness: 0.6, // Slightly polished ceramic look for subtle reflections
+            metalness: 0.05
         });
         const floor = new THREE.Mesh(floorGeo, floorMat);
         floor.receiveShadow = true;
@@ -552,10 +560,12 @@ export class Kitchen3DScene {
     }
 
     /**
-     * Get all station obstacle collision boxes
+     * Get all station obstacle collision boxes (exclude floor-dropped items — they are walkable)
      */
     getObstacles() {
-        return this.stations.map(s => s.obstacle);
+        return this.stations
+            .filter(s => !s.isFloorItem)
+            .map(s => s.obstacle);
     }
 
     /**
@@ -974,6 +984,9 @@ export class Kitchen3DScene {
             depth: 0.6,
             label: 'Sàn Nhà'
         });
+
+        // Flag: floor items are NOT obstacles — chef can walk over them freely
+        floorStation.isFloorItem = true;
 
         // Hide normal counter meshes but keep tray
         floorStation.group.children.forEach(c => {

@@ -1,8 +1,34 @@
 /* ==========================================================================
    OVERCOOKED 3D GAMEPLAY UI & TOUCH CONTROLS STYLES
+   Fully Responsive: Portrait Mobile → Landscape Mobile → Tablet → Desktop
    ========================================================================== */
 
-/* 1. Fullscreen 3D Viewport Canvas */
+/* ─────────────────────────────────────────────────────────────
+   1. Responsive Design Tokens (CSS Custom Properties)
+───────────────────────────────────────────────────────────── */
+:root {
+    /* Joystick sizing */
+    --joystick-size: 140px;
+    --joystick-thumb-size: 58px;
+    /* Action button sizing */
+    --action-btn-size: 76px;
+    --action-dash-size: 58px;
+    --action-btn-icon-size: 26px;
+    /* Orders bar */
+    --orders-bar-width: 220px;
+    --orders-bar-top: 90px;
+    /* HUD */
+    --hud-height: 56px;
+    /* Safe area */
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. Fullscreen 3D Viewport Canvas
+───────────────────────────────────────────────────────────── */
 #kitchen-3d-viewport {
     position: absolute;
     top: 0;
@@ -22,16 +48,18 @@
     height: 100% !important;
 }
 
-/* 2. Top-Left Waiting Orders Column (Overcooked / KitchenChaos Style - Image 2) */
+/* ─────────────────────────────────────────────────────────────
+   3. Waiting Orders Bar — Left Sidebar (Desktop/Landscape)
+───────────────────────────────────────────────────────────── */
 .overcooked-orders-bar {
     position: absolute;
-    top: 90px;
-    left: 20px;
+    top: var(--orders-bar-top);
+    left: max(20px, var(--safe-left));
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 220px;
-    max-height: calc(100vh - 200px);
+    width: var(--orders-bar-width);
+    max-height: calc(100dvh - var(--orders-bar-top) - 200px);
     z-index: 20;
     pointer-events: none;
     overflow-y: auto;
@@ -43,27 +71,15 @@
     display: none;
 }
 
-.recipes-waiting-title {
-    font-size: 15px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.6);
-    margin-bottom: 2px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    pointer-events: auto;
-}
-
-/* Individual Waiting Recipe Card (Vertical Stack on Left) */
+/* ─────────────────────────────────────────────────────────────
+   4. Individual Order Card
+───────────────────────────────────────────────────────────── */
 .overcooked-order-card {
     width: 100%;
-    background: rgba(15, 23, 42, 0.78);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 10px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-left: 4px solid #38bdf8;
@@ -79,65 +95,73 @@
 
 .overcooked-order-card:hover {
     transform: translateX(4px);
-    background: rgba(20, 30, 55, 0.85);
+    background: rgba(20, 30, 55, 0.9);
 }
 
 .overcooked-order-card.urgent {
     border-left-color: #ef4444;
     border-color: rgba(239, 68, 68, 0.5);
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.45);
     animation: orderShake 0.4s infinite alternate;
 }
 
 @keyframes orderCardPopIn {
-    0% { transform: translateX(-30px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    0% {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes orderShake {
-    0% { transform: rotate(-0.8deg); }
-    100% { transform: rotate(0.8deg); }
+    0% {
+        transform: rotate(-0.8deg);
+    }
+
+    100% {
+        transform: rotate(0.8deg);
+    }
 }
 
-/* Card Header: Dish Name & Reward */
+/* Card Header */
 .order-dish-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    background: transparent;
-    padding: 0;
-    border-bottom: none;
 }
 
 .order-dish-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     color: #ffffff;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: 1.2;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .order-dish-reward {
     font-size: 12px;
     font-weight: 800;
     color: #fbbf24;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
     flex-shrink: 0;
 }
 
-/* Recipe Ingredients (Row of food icons directly below dish name) */
+/* Recipe Ingredients Row */
 .order-recipe-formula {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 6px;
-    background: transparent;
-    padding: 2px 0;
+    gap: 5px;
     flex-wrap: wrap;
+    padding: 2px 0;
 }
 
 .recipe-ingredient-chip {
@@ -162,10 +186,10 @@
 }
 
 .recipe-ingredient-chip .chip-text {
-    display: none; /* Icon-only compact row as in Image 2 */
+    display: none;
 }
 
-/* Slim Bottom Patience Timer */
+/* Patience Bar */
 .order-patience-wrapper {
     width: 100%;
     height: 4px;
@@ -190,13 +214,15 @@
     background: #ef4444;
 }
 
-/* 3. Multi-directional Virtual Joystick (Bottom Left) */
+/* ─────────────────────────────────────────────────────────────
+   5. Virtual Joystick — Bottom Left
+───────────────────────────────────────────────────────────── */
 .virtual-joystick-container {
     position: absolute;
-    bottom: 30px;
-    left: 30px;
-    width: 140px;
-    height: 140px;
+    bottom: calc(30px + var(--safe-bottom));
+    left: calc(30px + var(--safe-left));
+    width: var(--joystick-size);
+    height: var(--joystick-size);
     z-index: 20;
     pointer-events: auto;
     touch-action: none;
@@ -225,8 +251,8 @@
 
 .joystick-thumb {
     position: absolute;
-    width: 58px;
-    height: 58px;
+    width: var(--joystick-thumb-size);
+    height: var(--joystick-thumb-size);
     border-radius: 50%;
     background: linear-gradient(135deg, #ff9800, #f57c00);
     border: 3px solid #ffffff;
@@ -245,21 +271,23 @@
     bottom: -22px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     pointer-events: none;
     white-space: nowrap;
 }
 
-/* 4. Action Buttons (Bottom Right) */
+/* ─────────────────────────────────────────────────────────────
+   6. Virtual Action Buttons — Bottom Right
+───────────────────────────────────────────────────────────── */
 .virtual-actions-container {
     position: absolute;
-    bottom: 25px;
-    right: 25px;
+    bottom: calc(25px + var(--safe-bottom));
+    right: calc(25px + var(--safe-right));
     display: flex;
     align-items: flex-end;
     gap: 16px;
@@ -272,12 +300,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .action-round-btn {
-    width: 76px;
-    height: 76px;
+    width: var(--action-btn-size);
+    height: var(--action-btn-size);
     border-radius: 50%;
     border: 3.5px solid #ffffff;
     display: flex;
@@ -289,7 +317,8 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.1s ease;
+    transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.1s ease;
 }
 
 .action-round-btn:active {
@@ -297,12 +326,10 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Button 1: CẦM / ĐẶT */
 .btn-interact {
     background: linear-gradient(135deg, #ff9100, #ff3d00);
 }
 
-/* Button 2: THÁI */
 .btn-chop {
     background: linear-gradient(135deg, #00e676, #00b0ff);
 }
@@ -311,21 +338,20 @@
     filter: brightness(1.2);
 }
 
-/* Button 3: LƯỚT (Dash) */
 .btn-dash {
-    width: 58px;
-    height: 58px;
+    width: var(--action-dash-size);
+    height: var(--action-dash-size);
     background: linear-gradient(135deg, #d500f9, #651fff);
 }
 
 .action-btn-icon {
-    font-size: 26px;
+    font-size: var(--action-btn-icon-size);
     line-height: 1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .btn-dash .action-btn-icon {
-    font-size: 20px;
+    font-size: calc(var(--action-btn-icon-size) - 6px);
 }
 
 .action-btn-label {
@@ -348,7 +374,9 @@
     text-shadow: none;
 }
 
-/* 5. Contextual Station Prompt Tooltip (Floats Center Bottom) */
+/* ─────────────────────────────────────────────────────────────
+   7. Station Prompt Pill — Center Bottom
+───────────────────────────────────────────────────────────── */
 .station-prompt-pill {
     position: absolute;
     bottom: 125px;
@@ -366,11 +394,19 @@
     z-index: 15;
     pointer-events: none;
     animation: promptBounce 0.25s ease-out;
+    max-width: 80vw;
 }
 
 @keyframes promptBounce {
-    0% { transform: translateX(-50%) translateY(10px) scale(0.9); opacity: 0; }
-    100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+    0% {
+        transform: translateX(-50%) translateY(10px) scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 .station-prompt-text {
@@ -378,7 +414,7 @@
     font-weight: 800;
     color: #ffd54f;
     letter-spacing: 0.3px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .station-prompt-badge {
@@ -390,95 +426,9 @@
     border-radius: 12px;
 }
 
-/* Responsive Scaling for Smaller Mobile Viewports */
-@media (max-width: 768px), (max-height: 500px) {
-    .virtual-joystick-container {
-        bottom: 16px;
-        left: 16px;
-        width: 110px;
-        height: 110px;
-    }
-    .joystick-thumb {
-        width: 44px;
-        height: 44px;
-    }
-    .virtual-actions-container {
-        bottom: 16px;
-        right: 16px;
-        gap: 10px;
-    }
-    .action-round-btn {
-        width: 60px;
-        height: 60px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-    }
-    .btn-dash {
-        width: 48px;
-        height: 48px;
-    }
-    .action-btn-icon {
-        font-size: 20px;
-    }
-    .overcooked-orders-bar {
-        top: 60px; /* Nhường chỗ cho top HUD */
-        left: 5px;
-        width: 160px;
-        gap: 6px;
-        padding: 6px;
-    }
-    .station-prompt-pill {
-        bottom: 140px; /* Tránh đè lên joystick/nút action */
-    }
-    .overcooked-order-card {
-        padding: 4px;
-        border-radius: 8px;
-    }
-    .order-timer-bar {
-        height: 5px;
-    }
-}
-
-/* 5.5 Portrait Mode Enhancements for Mobile/Tablet */
-@media (orientation: portrait) and (max-width: 1024px) {
-    .virtual-joystick-container {
-        width: clamp(120px, 30vw, 160px);
-        height: clamp(120px, 30vw, 160px);
-        bottom: 30px;
-        left: 20px;
-    }
-    .joystick-thumb {
-        width: clamp(50px, 12vw, 70px);
-        height: clamp(50px, 12vw, 70px);
-    }
-    .virtual-actions-container {
-        bottom: 30px;
-        right: 20px;
-        gap: 15px;
-    }
-    .action-round-btn {
-        width: clamp(70px, 18vw, 90px);
-        height: clamp(70px, 18vw, 90px);
-    }
-    .btn-dash {
-        width: clamp(55px, 14vw, 70px);
-        height: clamp(55px, 14vw, 70px);
-    }
-    .action-btn-icon {
-        font-size: clamp(24px, 6vw, 32px);
-    }
-    .overcooked-orders-bar {
-        transform: scale(1.3);
-        transform-origin: top left;
-        left: 10px;
-        top: 80px;
-    }
-    .station-prompt-pill {
-        bottom: clamp(170px, 40vw, 220px);
-        transform: translateX(-50%) scale(1.3);
-    }
-}
-
-/* 6. Pre-Level Controls & Gameplay Guide Modal (Requirement 8) */
+/* ─────────────────────────────────────────────────────────────
+   8. Controls Guide Modal (Pre-Level Intro)
+───────────────────────────────────────────────────────────── */
 .controls-guide-overlay {
     position: absolute;
     inset: 0;
@@ -490,11 +440,13 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .controls-guide-card {
     width: 620px;
     max-width: 95vw;
+    max-height: 92dvh;
     background: rgba(24, 32, 50, 0.98);
     border: 2px solid rgba(56, 189, 248, 0.35);
     border-radius: 20px;
@@ -505,11 +457,20 @@
     gap: 16px;
     color: #ffffff;
     animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 @keyframes modalPop {
-    0% { transform: scale(0.9) translateY(20px); opacity: 0; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
+    0% {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
 }
 
 .controls-guide-header {
@@ -557,7 +518,7 @@
     font-size: 13px;
     font-weight: 900;
     color: #38bdf8;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     min-width: 52px;
     text-align: center;
     flex-shrink: 0;
@@ -641,7 +602,6 @@
     cursor: pointer;
     box-shadow: 0 8px 25px rgba(2, 132, 199, 0.45);
     transition: all 0.2s ease;
-    align-self: center;
     width: 100%;
 }
 
@@ -649,4 +609,447 @@
     transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(2, 132, 199, 0.6);
     background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   Strategy:
+   • 4-column token overrides at each breakpoint
+   • Orders bar collapses to top strip on portrait phones
+   • Joystick & buttons scale via tokens
+   • Station prompt repositions dynamically
+═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   R1. Large Desktop (≥ 1200px wide)
+───────────────────────────────────────────────────────────── */
+@media (min-width: 1200px) {
+    :root {
+        --joystick-size: 150px;
+        --joystick-thumb-size: 62px;
+        --action-btn-size: 82px;
+        --action-dash-size: 62px;
+        --action-btn-icon-size: 28px;
+        --orders-bar-width: 240px;
+    }
+
+    .overcooked-orders-bar {
+        top: 80px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R2. Tablet Portrait (≤ 1024px, portrait orientation)
+───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) and (orientation: portrait) {
+    :root {
+        --joystick-size: clamp(130px, 32vw, 160px);
+        --joystick-thumb-size: clamp(52px, 13vw, 68px);
+        --action-btn-size: clamp(72px, 18vw, 88px);
+        --action-dash-size: clamp(56px, 14vw, 70px);
+        --action-btn-icon-size: clamp(24px, 6vw, 30px);
+        --orders-bar-top: 72px;
+        --orders-bar-width: clamp(150px, 40vw, 200px);
+    }
+
+    .virtual-joystick-container {
+        bottom: calc(36px + var(--safe-bottom));
+        left: calc(24px + var(--safe-left));
+    }
+
+    .virtual-actions-container {
+        bottom: calc(36px + var(--safe-bottom));
+        right: calc(24px + var(--safe-right));
+        gap: 14px;
+    }
+
+    .station-prompt-pill {
+        bottom: clamp(160px, 42vw, 210px);
+    }
+
+    .overcooked-orders-bar {
+        max-height: calc(100dvh - var(--orders-bar-top) - 220px);
+    }
+
+    .action-btn-label {
+        font-size: 10px;
+    }
+
+    .action-key-hint {
+        font-size: 8.5px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R3. Small Tablet / Large Phone Landscape (601px–900px wide, landscape)
+───────────────────────────────────────────────────────────── */
+@media (min-width: 601px) and (max-width: 900px) and (orientation: landscape) {
+    :root {
+        --joystick-size: clamp(100px, 18vh, 130px);
+        --joystick-thumb-size: clamp(42px, 8vh, 54px);
+        --action-btn-size: clamp(60px, 13vh, 80px);
+        --action-dash-size: clamp(48px, 10vh, 62px);
+        --action-btn-icon-size: clamp(20px, 5vh, 26px);
+        --orders-bar-width: 190px;
+        --orders-bar-top: 60px;
+    }
+
+    .virtual-joystick-container {
+        bottom: calc(16px + var(--safe-bottom));
+        left: calc(16px + var(--safe-left));
+    }
+
+    .virtual-actions-container {
+        bottom: calc(12px + var(--safe-bottom));
+        right: calc(16px + var(--safe-right));
+        gap: 10px;
+    }
+
+    .overcooked-orders-bar {
+        max-height: calc(100dvh - var(--orders-bar-top) - 100px);
+    }
+
+    .station-prompt-pill {
+        bottom: calc(var(--action-btn-size) + 30px);
+    }
+
+    .action-btn-label {
+        font-size: 10px;
+    }
+
+    .action-key-hint {
+        font-size: 8px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R4. Phone Portrait (≤ 600px wide, portrait)
+   Key change: Orders bar moves to a compact TOP STRIP
+───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) and (orientation: portrait) {
+    :root {
+        --joystick-size: clamp(120px, 30vw, 148px);
+        --joystick-thumb-size: clamp(48px, 12vw, 60px);
+        --action-btn-size: clamp(68px, 17vw, 82px);
+        --action-dash-size: clamp(52px, 13vw, 62px);
+        --action-btn-icon-size: clamp(22px, 5.5vw, 26px);
+    }
+
+    /* Portrait: Orders bar becomes a horizontal scrollable strip
+       just below the HUD (top area), not left column */
+    .overcooked-orders-bar {
+        position: absolute;
+        top: calc(var(--hud-height) + max(4px, var(--safe-top)));
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: none;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        gap: 8px;
+        padding: 6px max(10px, var(--safe-right)) 6px max(10px, var(--safe-left));
+        background: rgba(10, 16, 28, 0.7);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Each card: compact horizontal layout in strip */
+    .overcooked-order-card {
+        flex-shrink: 0;
+        width: clamp(150px, 45vw, 180px);
+        flex-direction: column;
+        padding: 7px 9px;
+        gap: 5px;
+        border-radius: 8px;
+        border-top: 3px solid #38bdf8;
+        border-left: none;
+    }
+
+    .overcooked-order-card.urgent {
+        border-top-color: #ef4444;
+        border-left: none;
+    }
+
+    .order-dish-title {
+        font-size: 12px;
+    }
+
+    .order-dish-reward {
+        font-size: 11px;
+    }
+
+    .recipe-ingredient-chip {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+    }
+
+    /* Joystick: bottom left, slightly smaller */
+    .virtual-joystick-container {
+        bottom: calc(20px + var(--safe-bottom));
+        left: calc(20px + var(--safe-left));
+    }
+
+    /* Action buttons: bottom right */
+    .virtual-actions-container {
+        bottom: calc(16px + var(--safe-bottom));
+        right: calc(16px + var(--safe-right));
+        gap: 10px;
+    }
+
+    /* Station prompt: above action buttons */
+    .station-prompt-pill {
+        bottom: calc(var(--action-btn-size) + 32px);
+        padding: 6px 14px;
+        border-radius: 20px;
+    }
+
+    .station-prompt-text {
+        font-size: 12px;
+    }
+
+    .station-prompt-badge {
+        font-size: 10px;
+    }
+
+    .action-btn-label {
+        font-size: 10px;
+    }
+
+    .action-key-hint {
+        font-size: 8px;
+    }
+
+    .joystick-guide-label {
+        font-size: 9px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R5. Phone Landscape (≤ 600px wide OR ≤ 430px tall, landscape)
+   Compact everything: minimal space usage
+───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 430px) {
+    :root {
+        --joystick-size: clamp(90px, 16vh, 115px);
+        --joystick-thumb-size: clamp(36px, 7vh, 46px);
+        --action-btn-size: clamp(54px, 12vh, 68px);
+        --action-dash-size: clamp(42px, 9vh, 52px);
+        --action-btn-icon-size: clamp(18px, 4.5vh, 22px);
+        --orders-bar-width: clamp(140px, 28vw, 175px);
+        --orders-bar-top: 52px;
+    }
+
+    .virtual-joystick-container {
+        bottom: calc(10px + var(--safe-bottom));
+        left: calc(10px + var(--safe-left));
+    }
+
+    .virtual-actions-container {
+        bottom: calc(8px + var(--safe-bottom));
+        right: calc(10px + var(--safe-right));
+        gap: 8px;
+    }
+
+    .overcooked-orders-bar {
+        gap: 6px;
+        max-height: calc(100dvh - var(--orders-bar-top) - 80px);
+        left: max(8px, var(--safe-left));
+    }
+
+    .overcooked-order-card {
+        padding: 5px 7px;
+        gap: 4px;
+        border-radius: 7px;
+    }
+
+    .order-dish-title {
+        font-size: 11px;
+    }
+
+    .order-dish-reward {
+        font-size: 10px;
+    }
+
+    .recipe-ingredient-chip {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+    }
+
+    .order-patience-wrapper {
+        height: 3px;
+    }
+
+    .station-prompt-pill {
+        bottom: calc(var(--action-btn-size) + 14px);
+        padding: 5px 12px;
+    }
+
+    .station-prompt-text {
+        font-size: 11px;
+    }
+
+    .station-prompt-badge {
+        font-size: 9px;
+    }
+
+    .action-btn-label {
+        font-size: 9px;
+    }
+
+    .action-key-hint {
+        font-size: 7.5px;
+        padding: 1px 5px;
+    }
+
+    .joystick-guide-label {
+        display: none;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R6. Very Small Devices (≤ 375px wide OR ≤ 380px tall)
+───────────────────────────────────────────────────────────── */
+@media (max-width: 375px),
+(max-height: 380px) {
+    :root {
+        --joystick-size: 105px;
+        --joystick-thumb-size: 42px;
+        --action-btn-size: 58px;
+        --action-dash-size: 44px;
+        --action-btn-icon-size: 18px;
+    }
+
+    .action-btn-label {
+        display: none;
+    }
+
+    .action-key-hint {
+        display: none;
+    }
+
+    .joystick-guide-label {
+        display: none;
+    }
+
+    .station-prompt-pill {
+        padding: 4px 10px;
+        border-radius: 16px;
+    }
+
+    .station-prompt-text {
+        font-size: 11px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   R7. Controls Guide Modal — Mobile Optimization
+───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .controls-guide-card {
+        padding: 16px 18px;
+        gap: 12px;
+    }
+
+    .controls-guide-title {
+        font-size: 17px;
+    }
+
+    .controls-guide-subtitle {
+        font-size: 12px;
+    }
+
+    .pc-keys-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .key-cap {
+        min-width: 44px;
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .key-desc-title {
+        font-size: 12px;
+    }
+
+    .key-desc-detail {
+        font-size: 10px;
+    }
+
+    .workflow-guide-box {
+        padding: 10px 12px;
+        gap: 6px;
+    }
+
+    .workflow-title {
+        font-size: 11px;
+    }
+
+    .workflow-steps-list {
+        font-size: 11px;
+    }
+
+    .step-num-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+
+    .controls-start-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-height: 500px) {
+    .controls-guide-card {
+        padding: 12px 16px;
+        gap: 8px;
+        max-height: 96dvh;
+    }
+
+    .controls-guide-header {
+        padding-bottom: 6px;
+    }
+
+    .controls-guide-title {
+        font-size: 15px;
+    }
+
+    .pc-keys-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+
+    .pc-key-card {
+        padding: 7px 10px;
+    }
+
+    .key-desc-title {
+        font-size: 11px;
+    }
+
+    .key-desc-detail {
+        display: none;
+    }
+
+    .workflow-guide-box {
+        padding: 8px 12px;
+        gap: 4px;
+    }
+
+    .workflow-steps-list {
+        font-size: 10.5px;
+        gap: 4px;
+    }
+
+    .controls-start-btn {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
 }

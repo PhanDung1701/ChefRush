@@ -73,9 +73,9 @@ export class Station3D {
 
         // Warm cozy restaurant kitchen materials matching reference style
         const woodCabinetMat = new THREE.MeshStandardMaterial({ color: 0x8d522c, roughness: 0.65 }); // Warm honey oak
-        const woodTopMat = new THREE.MeshStandardMaterial({ color: 0xb56d3b, roughness: 0.45 });     // Polished mahogany top
-        const steelTopMat = new THREE.MeshStandardMaterial({ color: 0xd0d7de, metalness: 0.75, roughness: 0.25 }); // Brushed stainless
-        const handleMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.8, roughness: 0.2 });
+        const woodTopMat = new THREE.MeshStandardMaterial({ color: 0xb56d3b, roughness: 0.35, metalness: 0.05 });     // Highly polished mahogany top
+        const steelTopMat = new THREE.MeshStandardMaterial({ color: 0xd0d7de, metalness: 0.85, roughness: 0.15 }); // Shiny brushed stainless
+        const handleMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.9, roughness: 0.1 });
 
         // 1. Counter Body
         const tableHeight = 0.95;

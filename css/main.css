@@ -40,6 +40,9 @@
 
     /* Fonts */
     --font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+
+    /* Layout Tokens — synced with overcooked.css & gameplay.css */
+    --hud-height: 56px;     /* Desktop/default HUD bar height */
 }
 
 * {
