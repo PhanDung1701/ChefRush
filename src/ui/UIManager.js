@@ -816,6 +816,23 @@ export class UIManager {
     }
 
     /**
+     * Request fullscreen on mobile/touch devices
+     */
+    tryFullscreen() {
+        const isMobileOrPortrait = window.innerWidth <= 850 || window.innerHeight > window.innerWidth || navigator.maxTouchPoints > 0;
+        if (!isMobileOrPortrait) return;
+
+        const el = document.documentElement;
+        if (el.requestFullscreen) {
+            el.requestFullscreen().catch(err => console.log('Fullscreen failed:', err));
+        } else if (el.webkitRequestFullscreen) {
+            el.webkitRequestFullscreen();
+        } else if (el.msRequestFullscreen) {
+            el.msRequestFullscreen();
+        }
+    }
+
+    /**
      * Bind DOM button clicks
      */
     bindEvents() {
@@ -1059,6 +1076,7 @@ export class UIManager {
         if (btnPlay) {
             btnPlay.addEventListener('click', () => {
                 this.audio.playClick();
+                this.tryFullscreen();
                 this.gm.transitionTo(GAME_STATES.LEVEL_SELECT);
             });
         }
@@ -1085,6 +1103,7 @@ export class UIManager {
 
         document.getElementById('btn-start-cooking').addEventListener('click', () => {
             this.audio.playClick();
+            this.tryFullscreen();
             this.gm.beginLevelGameplay();
         });
 
@@ -1095,6 +1114,7 @@ export class UIManager {
 
         document.getElementById('btn-next-level').addEventListener('click', () => {
             this.audio.playClick();
+            this.tryFullscreen();
             const nextLvl = this.gm.selectedLevelNumber + 1;
             if (nextLvl <= getTotalLevels()) {
                 this.gm.startLevel(nextLvl);

@@ -391,38 +391,90 @@
 }
 
 /* Responsive Scaling for Smaller Mobile Viewports */
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-height: 500px) {
     .virtual-joystick-container {
-        bottom: 20px;
-        left: 20px;
-        width: 120px;
-        height: 120px;
+        bottom: 16px;
+        left: 16px;
+        width: 110px;
+        height: 110px;
     }
     .joystick-thumb {
-        width: 50px;
-        height: 50px;
+        width: 44px;
+        height: 44px;
     }
     .virtual-actions-container {
-        bottom: 20px;
-        right: 20px;
-        gap: 12px;
+        bottom: 16px;
+        right: 16px;
+        gap: 10px;
     }
     .action-round-btn {
-        width: 65px;
-        height: 65px;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
     .btn-dash {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
     }
     .action-btn-icon {
-        font-size: 22px;
+        font-size: 20px;
     }
     .overcooked-orders-bar {
-        top: 10px;
-        left: 10px;
-        width: 170px;
+        top: 60px; /* Nhường chỗ cho top HUD */
+        left: 5px;
+        width: 160px;
         gap: 6px;
+        padding: 6px;
+    }
+    .station-prompt-pill {
+        bottom: 140px; /* Tránh đè lên joystick/nút action */
+    }
+    .overcooked-order-card {
+        padding: 4px;
+        border-radius: 8px;
+    }
+    .order-timer-bar {
+        height: 5px;
+    }
+}
+
+/* 5.5 Portrait Mode Enhancements for Mobile/Tablet */
+@media (orientation: portrait) and (max-width: 1024px) {
+    .virtual-joystick-container {
+        width: clamp(120px, 30vw, 160px);
+        height: clamp(120px, 30vw, 160px);
+        bottom: 30px;
+        left: 20px;
+    }
+    .joystick-thumb {
+        width: clamp(50px, 12vw, 70px);
+        height: clamp(50px, 12vw, 70px);
+    }
+    .virtual-actions-container {
+        bottom: 30px;
+        right: 20px;
+        gap: 15px;
+    }
+    .action-round-btn {
+        width: clamp(70px, 18vw, 90px);
+        height: clamp(70px, 18vw, 90px);
+    }
+    .btn-dash {
+        width: clamp(55px, 14vw, 70px);
+        height: clamp(55px, 14vw, 70px);
+    }
+    .action-btn-icon {
+        font-size: clamp(24px, 6vw, 32px);
+    }
+    .overcooked-orders-bar {
+        transform: scale(1.3);
+        transform-origin: top left;
+        left: 10px;
+        top: 80px;
+    }
+    .station-prompt-pill {
+        bottom: clamp(170px, 40vw, 220px);
+        transform: translateX(-50%) scale(1.3);
     }
 }
 

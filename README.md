@@ -15,7 +15,7 @@ To launch the game locally on your Windows machine:
    ```
 3. Open your browser and navigate to:
    ```
-   http://localhost:8080
+   http://localost:8080
    ```
 *(You can also double click `index.html` in any modern web browser).*
 

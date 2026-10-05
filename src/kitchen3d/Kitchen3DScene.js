@@ -1336,12 +1336,24 @@ export class Kitchen3DScene {
         this.updateClosestStation();
 
         // 4.5 Mobile Camera Tracking
-        if (window.innerWidth <= 768 && this.camera && this.chef) {
-            this.camera.position.x += (this.chef.position.x - this.camera.position.x) * dt * 5;
-            this.camera.position.z += (this.chef.position.z + 14.2 - this.camera.position.z) * dt * 5;
-            this.camera.lookAt(this.chef.position.x, 0, this.chef.position.z + 0.5);
+        const isMobileOrPortrait = window.innerWidth <= 850 || window.innerHeight > window.innerWidth || navigator.maxTouchPoints > 0;
+        
+        if (isMobileOrPortrait && this.camera && this.chef) {
+            // Khóa chặt camera vào nhân vật trên thiết bị di động
+            // Đưa camera gần hơn và theo sát hơn (lerp nhanh hơn)
+            const targetX = this.chef.position.x;
+            const targetY = 14.0; // Zoom in (default is 19.8)
+            const targetZ = this.chef.position.z + 10.0; // Zoom in (default is 14.2)
+            
+            this.camera.position.x += (targetX - this.camera.position.x) * dt * 10;
+            this.camera.position.y += (targetY - this.camera.position.y) * dt * 8;
+            this.camera.position.z += (targetZ - this.camera.position.z) * dt * 10;
+            // Keep a constant viewing angle to prevent swinging/wobbling when moving
+            this.camera.lookAt(this.camera.position.x, 0, this.camera.position.z - 10.0);
         } else if (this.camera) {
+            // Desktop Camera (phẳng và bao quát toàn cảnh)
             this.camera.position.x += (0 - this.camera.position.x) * dt * 5;
+            this.camera.position.y += (19.8 - this.camera.position.y) * dt * 5;
             this.camera.position.z += (14.2 - this.camera.position.z) * dt * 5;
             this.camera.lookAt(0, 0, 0.5);
         }
